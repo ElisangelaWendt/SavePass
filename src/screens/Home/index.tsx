@@ -30,15 +30,47 @@ export function Home() {
 
   async function loadData() {
     const dataKey = '@savepass:logins';
-    // Get asyncStorage data, use setSearchListData and setData
+    // Get asyncStorage data, use setSearchListData and setData'
+    const response = await AsyncStorage.getItem(dataKey)
+    const parsedData = JSON.parse(response!)
+    setSearchListData(parsedData)
+    setData(parsedData);
   }
 
   function handleFilterLoginData() {
     // Filter results inside data, save with setSearchListData
+    const filtered = searchListData.filter(data => {
+      if(data.service_name.includes(searchText)){
+        return data
+      }
+    })
+    setSearchListData(filtered)
+
+    //meu jeito
+    // if(searchText ==='') {
+    //   setSearchListData(data)
+    //   return
+    // }
+    // try{
+    //   const filtered = data.filter(item => {
+    //     const itemData = item.service_name.toUpperCase()
+    //     const textData = searchText.toUpperCase()
+    //     return itemData.indexOf(textData) > -1;
+    //   })
+    //   setSearchListData(filtered)
+    // }catch(error){
+    //   console.log(error);
+    // }
   }
 
   function handleChangeInputText(text: string) {
     // Update searchText value
+    if (text != '') {
+      setSearchText(text)
+    } else {
+      setSearchText('')
+      setSearchListData(data)
+    }
   }
 
   useFocusEffect(useCallback(() => {
